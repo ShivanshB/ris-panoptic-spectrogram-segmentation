@@ -14,7 +14,7 @@ class DoubleConv(nn.Module):
         nn.Conv2d(out_channels, out_channels, kernel_size=3, stride=1, padding=1, bias = False),
         nn.BatchNorm2d(out_channels),
         nn.ReLU(inplace=True)
-    )
+        )
 
   def forward(self, x):
     return self.conv(x)
@@ -22,7 +22,7 @@ class DoubleConv(nn.Module):
 # defining the U-Net class
 class UNET(nn.Module):
 
-  def __init__(self, in_channels=3, out_channels=3, features=[64, 128, 256, 512]):
+  def __init__(self, in_channels=3, out_channels=1, features=[64, 128, 256, 512]):
     super(UNET, self).__init__()
 
     self.ups = nn.ModuleList()
