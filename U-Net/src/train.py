@@ -18,19 +18,19 @@ from utils import (
 # hyperparameters
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-BATCH_SIZE = 16
-NUM_EPOCHS = 3
+BATCH_SIZE = 5
+NUM_EPOCHS = 10
 NUM_WORKERS = 2
 IMAGE_HEIGHT = 224
 IMAGE_WIDTH = 432
 PIN_MEMORY = True
 LOAD_MODEL = False
-TRAIN_IMG_DIR = "../data/train_images/"
-TRAIN_MASK_DIR = "../data/train_masks/"
+TRAIN_IMG_DIR = "../data/train_images"
+TRAIN_MASK_DIR = "../data/train_masks"
 VAL_IMG_DIR = "../data/val_images"
-VAL_MASK_DIR = '../data/val_masks'
+VAL_MASK_DIR = "../data/val_masks"
 
-def train_fn(loader, model, optimizer, loss_fr, scaler):
+def train_fn(loader, model, optimizer, loss_fn, scaler):
     loop = tqdm(loader)
 
     for batch_idc, (data, targets) in enumerate(loop):
@@ -86,7 +86,7 @@ def main():
         VAL_MASK_DIR,
         BATCH_SIZE,
         train_transform,
-        val_transforms,
+        val_transform,
         NUM_WORKERS,
         PIN_MEMORY
     )
@@ -96,7 +96,7 @@ def main():
 
     scaler = torch.cuda.amp.GradScaler()
     for epoch in range(NUM_EPOCHS):
-        train_fr(train_loader, model, optimizer, loss_fn, scaler)
+        train_fn(train_loader, model, optimizer, loss_fn, scaler)
 
         checkpoint = {
             "state_dict": model.state_dict(),
